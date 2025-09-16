@@ -1,5 +1,6 @@
 import React from 'react';
 import { Head, Link } from '@inertiajs/react';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
 interface Role { id: number; name: string }
 interface User { id: number; name: string; email: string; is_enabled: boolean; roles: Role[] }
@@ -12,12 +13,13 @@ interface Paginated<T> {
 
 export default function Index({ users }: { users: Paginated<User> }) {
   return (
-    <div className="max-w-6xl mx-auto p-6">
+    <AuthenticatedLayout header={<h2 className="text-xl font-semibold leading-tight text-gray-800">Usuarios</h2>}>
       <Head title="Usuarios" />
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-2xl font-semibold">Usuarios</h1>
-        <Link href={route('users.create')} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Nuevo Usuario</Link>
-      </div>
+      <div className="max-w-7xl mx-auto p-6">
+        <div className="flex items-center justify-between mb-4">
+          <h1 className="text-2xl font-semibold">Listado</h1>
+          <Link href={route('users.create')} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Nuevo Usuario</Link>
+        </div>
 
       <div className="overflow-x-auto">
         <table className="min-w-full border">
@@ -59,6 +61,7 @@ export default function Index({ users }: { users: Paginated<User> }) {
           </Link>
         ))}
       </div>
-    </div>
+      </div>
+    </AuthenticatedLayout>
   );
 }

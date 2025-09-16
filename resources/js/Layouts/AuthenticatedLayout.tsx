@@ -5,6 +5,8 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link, usePage } from '@inertiajs/react';
 import { PropsWithChildren, ReactNode, useState } from 'react';
 import { PageProps } from '@/types';
+import Container from '@/Components/Container';
+import ThemeToggle from '@/Components/ThemeToggle';
 
 export default function Authenticated({
     header,
@@ -16,10 +18,10 @@ export default function Authenticated({
         useState(false);
 
     return (
-        <div className="min-h-screen bg-gray-100">
-            <nav className="border-b border-gray-100 bg-white">
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div className="flex h-16 justify-between">
+        <div className="min-h-screen bg-gray-50 text-gray-800 dark:bg-black dark:text-white/80">
+            <nav className="border-b border-gray-100 bg-white/70 backdrop-blur dark:border-zinc-800 dark:bg-zinc-950/60">
+                <Container>
+                    <div className="flex h-16 items-center justify-between">
                         <div className="flex">
                             <div className="flex shrink-0 items-center">
                                 <Link href="/">
@@ -57,7 +59,8 @@ export default function Authenticated({
                             </div>
                         </div>
 
-                        <div className="hidden sm:ms-6 sm:flex sm:items-center">
+                        <div className="hidden sm:ms-6 sm:flex sm:items-center gap-3">
+                            <ThemeToggle />
                             <div className="relative ms-3">
                                 <Dropdown>
                                     <Dropdown.Trigger>
@@ -143,7 +146,6 @@ export default function Authenticated({
                             </button>
                         </div>
                     </div>
-                </div>
 
                 <div
                     className={
@@ -204,17 +206,20 @@ export default function Authenticated({
                         </div>
                     </div>
                 </div>
+                </Container>
             </nav>
 
             {header && (
-                <header className="bg-white shadow">
-                    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-                        {header}
-                    </div>
+                <header className="bg-white dark:bg-zinc-950 shadow-sm dark:shadow-none border-b border-gray-100 dark:border-zinc-800">
+                    <Container>
+                        <div className="py-6">{header}</div>
+                    </Container>
                 </header>
             )}
 
-            <main>{children}</main>
+            <main>
+                <Container className="py-6">{children}</Container>
+            </main>
         </div>
     );
 }

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Head, Link, useForm } from '@inertiajs/react';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
 interface Role { id: number; name: string }
 
@@ -22,12 +23,13 @@ export default function Create({ roles }: { roles: Role[] }) {
   }
 
   return (
-    <div className="max-w-3xl mx-auto p-6">
+    <AuthenticatedLayout header={<h2 className="text-xl font-semibold leading-tight text-gray-800">Crear Usuario</h2>}>
       <Head title="Crear Usuario" />
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">Crear Usuario</h1>
-        <Link href={route('users.index')} className="text-blue-600 hover:underline">Volver</Link>
-      </div>
+      <div className="max-w-3xl mx-auto p-6">
+        <div className="mb-4 flex items-center justify-between">
+          <h1 className="text-2xl font-semibold">Crear Usuario</h1>
+          <Link href={route('users.index')} className="text-blue-600 hover:underline">Volver</Link>
+        </div>
 
       <form onSubmit={submit} className="space-y-4">
         <div>
@@ -99,6 +101,7 @@ export default function Create({ roles }: { roles: Role[] }) {
           </button>
         </div>
       </form>
-    </div>
+      </div>
+    </AuthenticatedLayout>
   );
 }
