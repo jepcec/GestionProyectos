@@ -8,7 +8,12 @@ import { createRoot } from 'react-dom/client';
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 createInertiaApp({
-    title: (title) => `${title} - ${appName}`,
+    title: (title) => {
+        const t = title || appName;
+        // Mostrar solo 'Inicio' sin sufijo de la app
+        if (t === 'Inicio') return t;
+        return `${t} - ${appName}`;
+    },
     resolve: (name) =>
         resolvePageComponent(
             `./Pages/${name}.tsx`,

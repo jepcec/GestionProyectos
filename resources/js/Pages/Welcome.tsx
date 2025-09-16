@@ -1,11 +1,13 @@
+import { Head, Link, usePage } from '@inertiajs/react';
 import { PageProps } from '@/types';
-import { Head, Link } from '@inertiajs/react';
 
 export default function Welcome({
     auth,
     laravelVersion,
     phpVersion,
 }: PageProps<{ laravelVersion: string; phpVersion: string }>) {
+    const { props } = usePage<{ auth: { user: any; roles: string[] } }>();
+    const isAdmin = (props?.auth?.roles || []).includes('Administrador');
     const handleImageError = () => {
         document
             .getElementById('screenshot-container')
@@ -19,7 +21,7 @@ export default function Welcome({
 
     return (
         <>
-            <Head title="Welcome" />
+            <Head title="Inicio" />
             <div className="bg-gray-50 text-black/50 dark:bg-black dark:text-white/50">
                 <img
                     id="background"
@@ -42,7 +44,7 @@ export default function Welcome({
                                     />
                                 </svg>
                             </div>
-                            <nav className="-mx-3 flex flex-1 justify-end">
+                            <nav className="-mx-3 flex flex-1 justify-end gap-2">
                                 {auth.user ? (
                                     <Link
                                         href={route('dashboard')}
@@ -65,6 +67,15 @@ export default function Welcome({
                                             Register
                                         </Link>
                                     </>
+                                )}
+
+                                {auth.user && isAdmin && (
+                                    <Link
+                                        href={route('users.index')}
+                                        className="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                                    >
+                                        Usuarios
+                                    </Link>
                                 )}
                             </nav>
                         </header>
