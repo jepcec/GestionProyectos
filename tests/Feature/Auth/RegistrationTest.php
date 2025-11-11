@@ -16,16 +16,24 @@ class RegistrationTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_new_users_can_register(): void
-    {
-        $response = $this->post('/register', [
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-            'password' => 'password',
-            'password_confirmation' => 'password',
-        ]);
+   public function test_new_users_can_register(): void
+{
+    // Crear rol de prueba si tu app lo requiere
+    $role = Role::factory()->create();
 
-        $this->assertAuthenticated();
-        $response->assertRedirect(route('dashboard', absolute: false));
-    }
+    $response = $this->post('/register', [
+        'name' => 'Test User',
+        'email' => 'test@example.com',
+        'password' => 'password',
+        'password_confirmation' => 'password',
+    ]);
+
+    $this->assertAuthenticated();
+    $response->assertRedirect('/dashboard'); // O la ruta que uses
+
+    $this->assertDatabaseHas('users', [
+        'email' => 'test@example.com',
+    ]);
+}
+ 
 }
