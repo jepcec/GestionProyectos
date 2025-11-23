@@ -1,31 +1,47 @@
 import { Head, useForm } from '@inertiajs/react';
 import type React from 'react';
 
-// Make TS aware of Ziggy's global route() without adding deps
 declare const route: (name: string, params?: any) => string;
 
-interface CreateProps {
-  users: Array<{ id: number; name: string }>
+interface User {
+  id: number;
+  name: string;
 }
 
-export default function Create({ users }: CreateProps) {
-  const { data, setData, post, processing, errors } = useForm({
-    title: '',
-    description: '',
-    start_date: '',
-    end_date: '',
-    users: [] as number[],
+interface Project {
+  id: number;
+  title: string;
+  description: string;
+  start_date: string;
+  end_date: string;
+  status: string;
+  users: User[];
+}
+
+interface EditProps {
+  project: Project;
+  users: User[];
+}
+
+export default function Edit({ project, users }: EditProps) {
+  const { data, setData, put, processing, errors } = useForm({
+    title: project.title,
+    description: project.description,
+    start_date: project.start_date,
+    end_date: project.end_date,
+    status: project.status,
+    users: project.users.map((u) => u.id),
   });
 
   const submit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    post(route('projects.store'));
+    put(route('projects.update', project.id));
   };
 
   return (
     <div className="p-6 max-w-3xl mx-auto">
-      <Head title="Crear proyecto" />
-      <h1 className="text-2xl font-semibold mb-4">Crear proyecto</h1>
+      <Head title="Editar proyecto" />
+      <h1 className="text-2xl font-semibold mb-4">Editar proyecto</h1>
 
       <form onSubmit={submit} className="space-y-4">
         <div>
@@ -72,6 +88,23 @@ export default function Create({ users }: CreateProps) {
           </div>
         </div>
 
+        {/* Campo STATUS */}
+        <div>
+          <label className="block text-sm font-medium">Estado</label>
+          <select
+            className="mt-1 w-full border rounded px-3 py-2"
+            value={data.status}
+            onChange={(e) => setData('status', e.target.value)}
+          >
+            <option value="pending">Pendiente</option>
+            <option value="in_progress">En progreso</option>
+            <option value="completed">Completado</option>
+            <option value="cancelled">Cancelado</option>
+          </select>
+          {errors.status && <p className="text-sm text-red-600">{errors.status}</p>}
+        </div>
+
+        {/* Usuarios asignados */}
         <div>
           <label className="block text-sm font-medium">Usuarios asignados</label>
           <select
@@ -79,8 +112,8 @@ export default function Create({ users }: CreateProps) {
             className="mt-1 w-full border rounded px-3 py-2 h-40"
             value={data.users.map(String)}
             onChange={(e) => {
-              const options = Array.from(e.target.selectedOptions).map((o) => Number(o.value));
-              setData('users', options);
+              const selectedIds = Array.from(e.target.selectedOptions).map((o) => Number(o.value));
+              setData('users', selectedIds);
             }}
           >
             {users.map((u) => (
@@ -98,7 +131,7 @@ export default function Create({ users }: CreateProps) {
             disabled={processing}
             className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
           >
-            Guardar
+            Actualizar
           </button>
         </div>
       </form>

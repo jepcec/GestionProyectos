@@ -12,7 +12,7 @@ export default function Authenticated({
     header,
     children,
 }: PropsWithChildren<{ header?: ReactNode }>) {
-    const user = usePage<PageProps>().props.auth.user;
+    const { user, roles } = usePage<PageProps>().props.auth as any;
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
@@ -48,7 +48,7 @@ export default function Authenticated({
                                 >
                                     Tareas
                                 </NavLink>
-                                {user.roles?.some((role: { name: string }) => role.name === 'Administrador') && (
+                                {roles?.includes('Administrador') && (
                                     <NavLink
                                         href={route('users.index')}
                                         active={route().current('users.*')}
@@ -172,7 +172,7 @@ export default function Authenticated({
                         >
                             Tareas
                         </ResponsiveNavLink>
-                        {user.roles?.some((role: { name: string }) => role.name === 'Administrador') && (
+                        {roles?.includes('Administrador') && (
                             <ResponsiveNavLink
                                 href={route('users.index')}
                                 active={route().current('users.*')}
